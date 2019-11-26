@@ -14,6 +14,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import TaskList from './components/TaskList.vue'
+import { Types } from '@/store/index'
 
 export default Vue.extend({
   name: 'app',
@@ -24,6 +25,9 @@ export default Vue.extend({
     return {
       tasks: []
     }
+  },
+  async mounted () {
+    this.$store.dispatch(Types.LIST_TASKS)
   },
   methods: {
     addTask () {
