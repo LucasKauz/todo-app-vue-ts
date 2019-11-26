@@ -6,14 +6,20 @@
         Add new task
       </button>
     </header>
+
+    <TaskList :addTask="this.addTask" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import TaskList from './components/TaskList.vue'
 
 export default Vue.extend({
   name: 'app',
+  components: {
+    TaskList
+  },
   data () {
     return {
       tasks: []
