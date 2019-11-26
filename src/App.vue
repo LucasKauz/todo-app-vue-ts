@@ -6,31 +6,26 @@
         Add new task
       </button>
     </header>
-
     <TaskList :addTask="this.addTask" />
+
+    <TaskModal />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import TaskList from './components/TaskList.vue'
-import { Types } from '@/store/index'
+import TaskList from './containers/TaskList.vue'
+import TaskModal from './containers/TaskModal.vue'
 
 export default Vue.extend({
   name: 'app',
   components: {
-    TaskList
-  },
-  data () {
-    return {
-      tasks: []
-    }
-  },
-  async mounted () {
-    this.$store.dispatch(Types.LIST_TASKS)
+    TaskList,
+    TaskModal
   },
   methods: {
     addTask () {
+      this.$modal.show('task-modal')
     }
   }
 })
