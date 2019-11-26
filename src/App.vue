@@ -1,18 +1,27 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div id="app" class="App">
+    <header class="Header">
+      <h1>PawaTask</h1>
+      <button class="Btn Header__btn" @click="this.addTask">
+        Add new task
+      </button>
+    </header>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
 
 export default Vue.extend({
   name: 'app',
-  components: {
-    HelloWorld
+  data () {
+    return {
+      tasks: []
+    }
+  },
+  methods: {
+    addTask () {
+    }
   }
 })
 </script>
@@ -25,5 +34,18 @@ export default Vue.extend({
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+* {
+  box-sizing: border-box;
+}
+.Header {
+  display: flex;
+
+  &__btn {
+    justify-self: flex-end;
+  }
+}
+.Btn {
+  background: red;
 }
 </style>
