@@ -25,9 +25,19 @@ import TaskForm from '@/components/TaskForm.vue'
 import { Types, Task, Getters } from '@/store/index'
 import { mapGetters } from 'vuex'
 
+interface ModalParams {
+  params: {
+    taskId: number
+  }
+}
+interface Data {
+  taskFetched: boolean;
+  taskId: null | number;
+}
+
 export default Vue.extend({
   name: 'TaskModal',
-  data () {
+  data (): Data {
     return {
       taskFetched: false,
       taskId: null
@@ -52,7 +62,7 @@ export default Vue.extend({
     closeModal () {
       this.$modal.hide('task-modal')
     },
-    beforeOpen ({ params }: { params: any }) {
+    beforeOpen ({ params }: ModalParams) {
       if (!params || !params.taskId) {
         this.taskFetched = true
         return

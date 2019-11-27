@@ -1,31 +1,35 @@
 <template>
   <form @submit.prevent="sendForm">
     <header>
-      <h1>{{ title || 'Add new Task' }}</h1>
+      <h2>{{ title || 'Add new Task' }}</h2>
       <button @click="() => closeModal()">X</button>
     </header>
     <fieldset>
-      <label>Title</label>
+      <label for="title">Title</label>
       <input
         type="text"
         v-model.trim="title"
         placeholder="Task title"
         @change="validateInput('title')"
+        id="title"
         required
       />
-      <label class="hasError" v-if="titleError">{{ titleError }}</label>
+      <label class="hasError" v-if="titleError"  for="title">
+        {{ titleError }}
+      </label>
     </fieldset>
     <fieldset>
       <label>Description</label>
       <textarea v-model.trim="description"></textarea>
     </fieldset>
     <fieldset>
-      <label>Due date</label>
+      <label for="day">Due date</label>
       <input
         type="text"
         maxlenght="2"
         v-model.number="day"
         placeholder="DD"
+        id="day"
       />
       <input
         type="text"
@@ -42,7 +46,11 @@
     </fieldset>
     <fieldset>
       <label>Priority</label>
-      <select v-model="priority" required>
+      <select
+        v-model="priority"
+        required
+        id="priority"
+      >
         <option
           v-for="level in levels"
           v-bind:key="level"
@@ -53,11 +61,12 @@
       </select>
     </fieldset>
     <fieldset>
-      <label>Comments</label>
+      <label for="comments">Comments</label>
       <textarea
         name="comments"
         placeholder="Place the first task comment"
         v-model="comment"
+        id="comments"
       ></textarea>
     </fieldset>
     <fieldset>

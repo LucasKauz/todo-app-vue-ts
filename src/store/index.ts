@@ -3,6 +3,12 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+export interface Comment {
+  name: string;
+  date: string;
+  message: string;
+}
+
 export interface Task {
   id: number;
   title: string;
@@ -10,6 +16,7 @@ export interface Task {
   dueDate: string;
   priority: string;
   comment: string;
+  comments: Comment[];
 }
 
 interface TasksStore {
