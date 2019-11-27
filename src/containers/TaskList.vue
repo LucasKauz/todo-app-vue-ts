@@ -65,5 +65,14 @@ export default Vue.extend({
   cursor: pointer;
   font-size: 15px;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
+  color: #ef4b25;
+
+  &:hover, &:focus {
+    color: #ce4626;
+  }
+
+  &:active {
+    color: #9a3219;
+  }
 }
 </style>
