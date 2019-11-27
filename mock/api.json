@@ -6,7 +6,19 @@
             "description": "The user should be able to take the trash out.",
             "dueDate": "2019-03-12",
             "priority": "Low",
-            "comment": "Hey, could you take the trash out?"
+            "comment": "Hey, could you take the trash out?",
+            "comments": [
+                {
+                    "name": "Lucas",
+                    "date": "2019-11-03",
+                    "message": "Lorem ipsum"
+                },
+                {
+                    "name": "Ivan",
+                    "date": "2019-10-10",
+                    "message": "I think that it works"
+                }
+            ]
         },
         {
             "id": 2,
@@ -22,7 +34,14 @@
             "description": "The user MUST be able to be happy",
             "dueDate": "2020-01-10",
             "priority": "medium",
-            "comment": "Don't worry."
+            "comment": "Don't worry.",
+            "comments": [
+                {
+                    "name": "Thaysa",
+                    "date": "2019-09-01",
+                    "message": "You shouldn't enforce it"
+                }
+            ]
         }
     ],
     "add": {
