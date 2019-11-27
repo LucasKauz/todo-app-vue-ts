@@ -1,0 +1,43 @@
+{
+    "tasks": [
+        {
+            "id": 1,
+            "title": "Take the trash out",
+            "description": "The user should be able to take the trash out.",
+            "dueDate": "2019-03-12",
+            "priority": "Low",
+            "comment": "Hey, could you take the trash out?"
+        },
+        {
+            "id": 2,
+            "title": "Buy some milk",
+            "description": "The user MUST buy me some milk.",
+            "dueDate": "2019-02-12",
+            "priority": "high",
+            "comment": "Please, buy me some milk."
+        },
+        {
+            "id": 3,
+            "title": "Be happy",
+            "description": "The user MUST be able to be happy",
+            "dueDate": "2020-01-10",
+            "priority": "medium",
+            "comment": "Don't worry."
+        }
+    ],
+    "add": {
+        "id": 4,
+        "title": "Added item",
+        "description": "Why don't you add some text",
+        "dueDate": "2019-01-10",
+        "priority": "low"
+    },
+    "edit": {
+        "id": 2,
+        "title": "Buy more milk",
+        "description": "The amount of milk bought wasn't enough.",
+        "dueDate": "2019-02-13",
+        "priority": "high",
+        "comment": "Please, buy me more milk."
+    }
+}
