@@ -47,7 +47,7 @@ export default Vue.extend({
       })
     },
     viewTask (taskId: number) {
-      this.$modal.show('task-modal', {
+      this.$modal.show('task-overview-modal', {
         taskId
       })
     }

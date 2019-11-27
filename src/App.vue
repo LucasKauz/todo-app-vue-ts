@@ -9,6 +9,7 @@
     <TaskList :addTask="this.addTask" />
 
     <TaskModal />
+    <TaskOverviewModal />
   </div>
 </template>
 
@@ -16,12 +17,14 @@
 import Vue from 'vue'
 import TaskList from './containers/TaskList.vue'
 import TaskModal from './containers/TaskModal.vue'
+import TaskOverviewModal from './containers/TaskOverviewModal.vue'
 
 export default Vue.extend({
   name: 'app',
   components: {
     TaskList,
-    TaskModal
+    TaskModal,
+    TaskOverviewModal
   },
   methods: {
     addTask () {
