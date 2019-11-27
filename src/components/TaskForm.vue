@@ -87,7 +87,8 @@ export default Vue.extend({
   props: {
     getCurrentTask: Function,
     dispatchForm: Function,
-    currentData: Object
+    currentData: Object,
+    closeModal: Function
   },
   async mounted () {
     const data = await this.getCurrentTask()
@@ -145,7 +146,7 @@ export default Vue.extend({
   },
   methods: {
     sendForm () {
-      const formData: Omit<Task, 'id'> = {
+      const formData: Omit<Task, 'id' | 'comments'> = {
         title: this.title,
         description: this.description,
         dueDate: this.dueDate,

@@ -17,6 +17,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapMutations, mapActions } from 'vuex'
+import { Types } from '../store'
 export default Vue.extend({
   name: 'Comments',
   data () {
@@ -26,15 +28,23 @@ export default Vue.extend({
     }
   },
   props: {
-    comments: Array
+    comments: Array,
+    taskId: {
+      type: Number,
+      required: true
+    }
   },
   methods: {
-    sendComment (e: any) {
+    sendComment () {
       if (this.commentMessage.length < 2) {
         return
       }
 
-      console.log('add new comment')
+      this.$store.dispatch(Types.ADD_COMMENT, {
+        message: this.commentMessage,
+        name: this.commentOwner,
+        taskId: this.taskId
+      })
     }
   }
 })

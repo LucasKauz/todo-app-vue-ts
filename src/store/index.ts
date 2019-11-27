@@ -4,9 +4,14 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export interface Comment {
+  id: number;
   name: string;
-  date: string;
   message: string;
+  date: string;
+}
+
+export interface AddCommentPayload extends Pick<Comment, 'name' | 'message'> {
+  taskId: number;
 }
 
 export interface Task {
@@ -23,6 +28,11 @@ interface TasksStore {
   tasks: Task[];
 }
 
+export interface AddCommentResponse {
+  success: boolean;
+  comment: Comment;
+}
+
 export enum PriorityLevels {
   LOW = 'low',
   MEDIUM = 'medium',
@@ -36,7 +46,8 @@ export const enum Types {
   ADD_TASK = 'ADD_TASK',
   EDIT_TASK = 'EDIT_TASK',
   LOAD_TASK = 'LOAD_TASK',
-  UPDATE_TASK = 'UPDATE_TASK'
+  UPDATE_TASK = 'UPDATE_TASK',
+  ADD_COMMENT = 'ADD_COMMENT'
 }
 
 export const enum Getters {
@@ -65,6 +76,14 @@ export default new Vuex.Store<TasksStore>({
       if (payload.taskIndex < 0) return
 
       state.tasks.splice(payload.taskIndex, 1, payload.task)
+    },
+    [Types.ADD_COMMENT]: (state, payload: { comment: Comment, taskId: number }) => {
+      // find comment related task index
+      const taskIndex = state.tasks.findIndex((task) => task.id === payload.taskId)
+
+      if (taskIndex === -1) return
+
+      state.tasks[taskIndex].comments.push(payload.comment)
     }
   },
   actions: {
@@ -100,6 +119,16 @@ export default new Vuex.Store<TasksStore>({
           const taskIndex = state.tasks.findIndex((task: Task) => task.id === taskId)
 
           commit(Types.UPDATE_TASK, { taskIndex, task })
+        })
+    },
+    [Types.ADD_COMMENT] ({ commit, state }, payload: AddCommentPayload) {
+      return fetch(`http://localhost:3000/comment`)
+        .then((response) => response.json())
+        .then((data: AddCommentResponse) => {
+          commit(Types.ADD_COMMENT, {
+            taskId: payload.taskId,
+            comment: data.comment
+          })
         })
     }
   },

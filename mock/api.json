@@ -9,11 +9,13 @@
             "comment": "Hey, could you take the trash out?",
             "comments": [
                 {
+                    "id": 1,
                     "name": "Lucas",
                     "date": "2019-11-03",
                     "message": "Lorem ipsum"
                 },
                 {
+                    "id": 2,
                     "name": "Ivan",
                     "date": "2019-10-10",
                     "message": "I think that it works"
@@ -26,7 +28,8 @@
             "description": "The user MUST buy me some milk.",
             "dueDate": "2019-02-12",
             "priority": "high",
-            "comment": "Please, buy me some milk."
+            "comment": "Please, buy me some milk.",
+            "comments": []
         },
         {
             "id": 3,
@@ -37,6 +40,7 @@
             "comment": "Don't worry.",
             "comments": [
                 {
+                    "id": 3,
                     "name": "Thaysa",
                     "date": "2019-09-01",
                     "message": "You shouldn't enforce it"
@@ -58,5 +62,14 @@
         "dueDate": "2019-02-13",
         "priority": "high",
         "comment": "Please, buy me more milk."
+    },
+    "comment": {
+        "success": true,
+        "comment": {
+            "id": 4,
+            "name": "Tallin",
+            "date": "2019-09-01",
+            "message": "5,000 year ago..."
+        }
     }
 }

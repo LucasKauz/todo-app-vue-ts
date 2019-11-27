@@ -12,7 +12,10 @@
       Loading...
     </template>
     <template v-else>
-      <TaskOverview :currentTask="currentTask"/>
+      <TaskOverview
+        :currentTask="currentTask"
+        :editTask="editTask"
+        :closeModal="closeModal"/>
     </template>
   </modal>
 </template>
@@ -42,8 +45,14 @@ export default Vue.extend({
     }
   },
   methods: {
+    editTask () {
+      this.$modal.hide('task-overview-modal')
+      this.$modal.show('task-modal', {
+        taskId: this.taskId
+      })
+    },
     closeModal () {
-      this.$modal.hide('task-modal')
+      this.$modal.hide('task-overview-modal')
     },
     beforeOpen ({ params }: { params: any }) {
       if (!params || !params.taskId) {

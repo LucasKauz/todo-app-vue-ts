@@ -12,7 +12,7 @@
       Loading...
     </template>
     <template v-else>
-      <TaskForm :getCurrentTask="getCurrentTask"/>
+      <TaskForm :getCurrentTask="getCurrentTask" :closeModal="closeModal"/>
     </template>
   </modal>
 </template>
