@@ -4,15 +4,16 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export interface Task {
-  title: string,
-  description: string,
-  dueDate: string,
-  priority: string,
-  comment: string
+  id: number;
+  title: string;
+  description: string;
+  dueDate: string;
+  priority: string;
+  comment: string;
 }
 
 interface TasksStore {
-  tasks: Task[]
+  tasks: Task[];
 }
 
 export enum PriorityLevels {
@@ -26,12 +27,25 @@ export const enum Types {
   LOAD_TASKS = 'LOAD_TASKS',
   UPDATE_TASKS = 'UPDATE_TASKS',
   ADD_TASK = 'ADD_TASK',
-  EDIT_TASK = 'EDIT_TASK'
+  EDIT_TASK = 'EDIT_TASK',
+  LOAD_TASK = 'LOAD_TASK',
+  UPDATE_TASK = 'UPDATE_TASK'
+}
+
+export const enum Getters {
+  GET_TASK_BY_ID = 'GET_TASK_BY_ID'
 }
 
 export default new Vuex.Store<TasksStore>({
   state: {
     tasks: []
+  },
+  getters: {
+    [Getters.GET_TASK_BY_ID]: state => (taskId: number) => {
+      return state.tasks.find((task) => {
+        return task.id === taskId
+      })
+    }
   },
   mutations: {
     [Types.UPDATE_TASKS]: (state, payload: Task[]) => {
@@ -39,21 +53,25 @@ export default new Vuex.Store<TasksStore>({
     },
     [Types.ADD_TASK]: (state, payload: Task) => {
       state.tasks = [ ...state.tasks, payload ]
+    },
+    [Types.UPDATE_TASK]: (state, payload: { taskIndex: number, task: Task }) => {
+      if (payload.taskIndex < 0) return
+
+      state.tasks.splice(payload.taskIndex, 1, payload.task)
     }
   },
   actions: {
     [Types.LOAD_TASKS] () {
-      return fetch('https://gist.githubusercontent.com/LucasKauz/43eefb1402b8578328199156254bef33/raw/0ca703a9b9f992aca578f395cc50d004bb0bc9dc/todo-list.json')
+      return fetch('http://localhost:3000/tasks')
         .then(response => response.json())
     },
     [Types.LIST_TASKS] ({ commit, dispatch }) {
       dispatch(Types.LOAD_TASKS).then((response) => {
-        const { data = [] } = response
-        commit(Types.UPDATE_TASKS, data)
+        commit(Types.UPDATE_TASKS, response)
       })
     },
     [Types.ADD_TASK] ({ commit }, payload) {
-      fetch('https://gist.githubusercontent.com/LucasKauz/43eefb1402b8578328199156254bef33/raw/0ca703a9b9f992aca578f395cc50d004bb0bc9dc/todo-list.json')
+      fetch('http://localhost:3000/add')
         .then((response) => response.json())
         .then((jsonResponse) => {
           const task = jsonResponse.data[0]
@@ -61,11 +79,20 @@ export default new Vuex.Store<TasksStore>({
         })
     },
     [Types.EDIT_TASK] ({ commit }, payload) {
-      fetch('https://gist.githubusercontent.com/LucasKauz/43eefb1402b8578328199156254bef33/raw/0ca703a9b9f992aca578f395cc50d004bb0bc9dc/todo-list.json')
+      fetch('http://localhost:3000/edit')
         .then((response) => response.json())
         .then((jsonResponse) => {
           const task = jsonResponse.data[0]
           commit(Types.ADD_TASK, task)
+        })
+    },
+    [Types.LOAD_TASK] ({ commit, state }, taskId) {
+      return fetch(`http://localhost:3000/tasks/${taskId}`)
+        .then((response) => response.json())
+        .then((task) => {
+          const taskIndex = state.tasks.findIndex((task: Task) => task.id === taskId)
+
+          commit(Types.UPDATE_TASK, { taskIndex, task })
         })
     }
   },

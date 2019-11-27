@@ -5,13 +5,15 @@
     :scrollable="true"
     :width="'90%'"
     :height="'auto'"
-    :maxWidth="900">
-    <header>
-      <h1>Add new Task</h1>
-      <button @click="() => closeModal()">X</button>
-    </header>
-
-    <TaskForm />
+    :maxWidth="900"
+    @before-open="beforeOpen"
+    @closed="closed">
+    <template v-if="!taskFetched">
+      Loading...
+    </template>
+    <template v-else>
+      <TaskForm :getCurrentTask="getCurrentTask"/>
+    </template>
   </modal>
 </template>
 
@@ -20,11 +22,26 @@ import Vue from 'vue'
 
 import TaskForm from '@/components/TaskForm.vue'
 
-import { Types, Task } from '@/store/index'
+import { Types, Task, Getters } from '@/store/index'
+import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'TaskModal',
+  data () {
+    return {
+      taskFetched: false,
+      taskId: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getTaskById: Getters.GET_TASK_BY_ID
+    })
+  },
   methods: {
+    getCurrentTask (): Task | null {
+      return this.taskId ? this.getTaskById(this.taskId) : null
+    },
     dispatchForm (type: Types, formData: Task) {
       const formDispatched = this.$store.dispatch(type, formData)
 
@@ -34,6 +51,23 @@ export default Vue.extend({
     },
     closeModal () {
       this.$modal.hide('task-modal')
+    },
+    beforeOpen ({ params }: { params: any }) {
+      if (!params || !params.taskId) {
+        this.taskFetched = true
+        return
+      }
+
+      this.taskId = params.taskId
+
+      this.$store.dispatch(Types.LOAD_TASK, params.taskId)
+        .then(() => {
+          this.taskFetched = true
+        })
+    },
+    closed () {
+      this.taskId = null
+      this.taskFetched = false
     }
   },
   components: {

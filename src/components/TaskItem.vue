@@ -3,8 +3,8 @@
     <input type="checkbox" />
     {{ task.title }}
     {{ task.dueDate }}
-    <button class="Btn" @click="viewTask">C</button>
-    <button class="Btn" @click="editTask">E</button>
+    <button class="Btn" @click="() => viewTask(task.id)">C</button>
+    <button class="Btn" @click="() => editTask(task.id)">E</button>
   </div>
 </template>
 

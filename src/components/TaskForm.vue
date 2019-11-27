@@ -1,5 +1,9 @@
 <template>
   <form @submit.prevent="sendForm">
+    <header>
+      <h1>{{ title || 'Add new Task' }}</h1>
+      <button @click="() => closeModal()">X</button>
+    </header>
     <fieldset>
       <label>Title</label>
       <input
@@ -72,7 +76,20 @@ import { changeDatePart, validateDate } from '@/helpers/formValidate'
 export default Vue.extend({
   name: 'TaskForm',
   props: {
-    dispatchForm: Function
+    getCurrentTask: Function,
+    dispatchForm: Function,
+    currentData: Object
+  },
+  async mounted () {
+    const data = await this.getCurrentTask()
+
+    if (!data) return
+
+    this.title = data.title
+    this.description = data.description
+    this.dueDate = data.dueDate
+    this.comment = data.comment
+    this.priority = data.priority
   },
   data () {
     return {
@@ -119,7 +136,7 @@ export default Vue.extend({
   },
   methods: {
     sendForm () {
-      const formData: Task = {
+      const formData: Omit<Task, 'id'> = {
         title: this.title,
         description: this.description,
         dueDate: this.dueDate,
