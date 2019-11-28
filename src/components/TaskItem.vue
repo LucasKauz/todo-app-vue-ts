@@ -33,7 +33,7 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   padding: 8px 0;
-  border-bottom: solid 1px #ccc;
+  border-bottom: solid 1px #eaeaea;
 
   &__square {
     width: 15px;

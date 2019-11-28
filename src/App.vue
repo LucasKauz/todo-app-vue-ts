@@ -54,7 +54,7 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: solid 1px #ccc;
+  border-bottom: solid 1px #eaeaea;
   margin-bottom: 16px;
 
   &__btn {

@@ -6,19 +6,25 @@ body {
   box-sizing: border-box;
 }
 
-.v--modal-box.v--modal {
-  padding: 20px;
-}
-
 .ModalHeader {
     margin: 0 0 26px;
 
     &--withButton {
       display: flex;
+      flex-wrap: wrap;
 
-      & .ModalHeader__title {
+      .ModalHeader__title {
         margin-right: 15px;
       }
+
+      .ModalHeader__btn {
+        text-align: left;
+        @media screen and (max-width: 420px) {
+          min-width: 100%;
+        }
+      }
+
+      
     }
 
     &__title {
@@ -38,6 +44,9 @@ body {
     margin-bottom: 16px;
     display: flex;
     flex-direction: column;
+    &:last-child {
+      margin-bottom: 0;
+    }
     &--row {
       flex-direction: row;
       flex-wrap: wrap;
@@ -54,8 +63,6 @@ body {
       & label {
         min-width: 100%
       }
-
-
     }
   }
 
@@ -75,7 +82,7 @@ body {
     border: 1px solid #ccc;
   }
   &__input {
-    height: 35px;
+    height: 39px;
   }
   &__textarea {
     height: 64px;

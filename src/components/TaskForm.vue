@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="sendForm" class="DefaultForm">
+  <form @submit.prevent="sendForm" class="DefaultForm TaskForm">
     <header class="ModalHeader">
       <h2 class="ModalHeader__title">{{ isEdit ? title : 'Add new Task' }}</h2>
       <CloseButton :onClick="closeModal" />
@@ -193,6 +193,8 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .TaskForm {
+  padding: 20px;
+
   &__priority {
     max-width: 160px;
   }
