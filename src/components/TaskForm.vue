@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="sendForm" class="DefaultForm">
-    <header>
+    <header class="ModalHeader">
       <h2 class="ModalHeader__title">{{ isEdit ? title : 'Add new Task' }}</h2>
       <CloseButton :onClick="closeModal" />
     </header>
@@ -79,7 +79,9 @@
       ></textarea>
     </div>
     <div class="DefaultForm__fieldset">
-      <button class="Btn DefaultForm__submit">Add task</button>
+      <button class="Btn DefaultForm__submit">
+        {{ isEdit ? 'Edit task' : 'Add task' }}
+      </button>
     </div>
   </form>
 </template>

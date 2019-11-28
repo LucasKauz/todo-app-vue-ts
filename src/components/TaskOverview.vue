@@ -1,14 +1,18 @@
 <template>
-  <div>
-    <header>
-      <h2>{{ currentTask.title }}</h2>
-      <button @click="closeModal">Close</button>
-      <button @click="() => editTask(currentTask.id)">Edit task</button>
+  <div class="TaskOverview">
+    <header class="ModalHeader ModalHeader--withButton">
+      <h2 class="ModalHeader__title">
+        {{ currentTask.title }}
+      </h2>
+      <button @click="() => editTask(currentTask.id)" class="ModalHeader__btn Link">
+        Edit task
+      </button>
+      <CloseButton :onClick="closeModal"/>
     </header>
-    <div>{{ currentTask.description }}</div>
-    <div>
-      <div>Date: {{ formatedDate }}</div>
-      <div>Priority: {{ currentTask.priority }}</div>
+    <div class="TaskOverview__description">{{ currentTask.description }}</div>
+    <div class="TaskOverview__meta">
+      <div><strong>Date:</strong> {{ formatedDate }}</div>
+      <div><strong>Priority:</strong> {{ currentTask.priority }}</div>
     </div>
     <Comments
       :comments="currentTask.comments"
@@ -21,6 +25,7 @@
 import Vue from 'vue'
 
 import Comments from '@/components/Comments.vue'
+import CloseButton from '@/components/CloseButton.vue'
 
 export default Vue.extend({
   name: 'TaskOverview',
@@ -37,7 +42,20 @@ export default Vue.extend({
     }
   },
   components: {
-    Comments
+    Comments,
+    CloseButton
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.TaskOverview {
+  &__description {
+    margin-bottom: 16px;
+  }
+  &__meta {
+    display:flex;
+    justify-content: space-between;
+  }
+}
+</style>

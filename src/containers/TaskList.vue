@@ -54,25 +54,3 @@ export default Vue.extend({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.Link {
-  background: transparent;
-  text-decoration: underline;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  font-size: 15px;
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  color: #ef4b25;
-
-  &:hover, &:focus {
-    color: #ce4626;
-  }
-
-  &:active {
-    color: #9a3219;
-  }
-}
-</style>
