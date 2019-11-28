@@ -3,7 +3,7 @@
     <div v-for="(comment, index) in comments" :key="index" class="Comment">
       <div class="Comment__header">
         {{ comment.name }}
-        <span class="Comment__date">{{ comment.date }}</span>
+        <span class="Comment__date">{{ commentDate(comment.date) }}</span>
       </div>
       <div class="Comment__message">{{ comment.message }}</div>
     </div>
@@ -24,8 +24,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+import moment from 'moment'
 import { mapMutations, mapActions } from 'vuex'
+
 import { Types } from '../store'
+
 export default Vue.extend({
   name: 'Comments',
   data () {
@@ -54,6 +58,15 @@ export default Vue.extend({
       })
 
       this.commentMessage = ''
+    },
+    commentDate (date: string): string {
+      console.log(
+        date,
+        moment(new Date(date)),
+        moment(new Date(date)).format('DD/MM/YYYY'),
+        moment(new Date(date)).calendar()
+      )
+      return moment(new Date(date)).calendar()
     }
   }
 })

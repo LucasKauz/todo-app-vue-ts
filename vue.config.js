@@ -1,6 +1,7 @@
+const webpack = require('webpack')
+
 module.exports = {
-  configureWebpack: config => ({
-    // here the webpack config
+  configureWebpack: (config, a) => ({
     module: {
       rules: [
         {
@@ -8,6 +9,13 @@ module.exports = {
           loader: 'vue-svg-inline-loader'
         }
       ]
-    }
+    },
+    plugins: [
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/
+      })
+      // new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en-gb/)
+    ]
   })
 }

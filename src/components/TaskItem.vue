@@ -4,7 +4,7 @@
     <span class="TaskItem__title">{{ task.title }}</span>
     <img src="@/assets/calendar-alt.svg" svg-inline svg-sprite class="CalendarIcon TaskItem__column" alt="calendar icon" aria-hidden="true"/>
     <span class="TaskItem__column">
-    {{ task.dueDate }}
+      {{ dueDate }}
     </span>
     <button class="Btn Btn--withIcon TaskItem__column" @click="() => viewTask(task.id)">
       <img src="@/assets/comment.svg" svg-inline svg-sprite class="Btn__icon" alt="Comment" aria-label="Comment task"/>
@@ -18,12 +18,19 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import moment from 'moment'
+
 export default Vue.extend({
   name: 'TaskItem',
   props: {
     task: Object,
     editTask: Function,
     viewTask: Function
+  },
+  computed: {
+    dueDate (): string {
+      return moment(new Date(this.task.dueDate)).format('DD/MM/YYYY')
+    }
   }
 })
 </script>

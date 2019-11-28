@@ -12,7 +12,7 @@
       </header>
       <div class="TaskOverview__description">{{ currentTask.description }}</div>
       <div class="TaskOverview__meta">
-        <div><strong>Date:</strong> {{ formatedDate }}</div>
+        <div><strong>Date:</strong> {{ dueDate }}</div>
         <div><strong>Priority:</strong> {{ currentTask.priority }}</div>
       </div>
     </div>
@@ -28,6 +28,8 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import moment from 'moment'
+
 import Comments from '@/components/Comments.vue'
 import CloseButton from '@/components/CloseButton.vue'
 
@@ -39,10 +41,8 @@ export default Vue.extend({
     closeModal: Function
   },
   computed: {
-    formatedDate () {
-      const date = new Date(this.currentTask.dueDate)
-      const formatedMonth = String(date.getMonth()).padStart(2, '0')
-      return `${date.getDate()}/${formatedMonth}/${date.getFullYear()}`
+    dueDate () {
+      return moment(new Date(this.currentTask.dueDate)).format('DD/MM/YYYY')
     }
   },
   components: {
