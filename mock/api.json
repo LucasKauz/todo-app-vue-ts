@@ -5,7 +5,7 @@
             "title": "Take the trash out",
             "description": "The user should be able to take the trash out.",
             "dueDate": "2019-03-12",
-            "priority": "Low",
+            "priority": "low",
             "comment": "Hey, could you take the trash out?",
             "comments": [
                 {

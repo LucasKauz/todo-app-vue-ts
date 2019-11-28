@@ -5,7 +5,7 @@
     :scrollable="true"
     :width="'90%'"
     :height="'auto'"
-    :maxWidth="900"
+    :maxWidth="500"
     @before-open="beforeOpen"
     @closed="closed">
     <template v-if="!taskFetched">

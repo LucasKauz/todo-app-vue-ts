@@ -1,11 +1,11 @@
 <template>
-  <form @submit.prevent="sendForm">
+  <form @submit.prevent="sendForm" class="DefaultForm">
     <header>
-      <h2>{{ title || 'Add new Task' }}</h2>
-      <button @click="() => closeModal()">X</button>
+      <h2 class="ModalHeader__title">{{ title || 'Add new Task' }}</h2>
+      <CloseButton :onClick="closeModal" />
     </header>
-    <fieldset>
-      <label for="title">Title</label>
+    <div class="DefaultForm__fieldset">
+      <label class="DefaultForm__label" for="title">Title</label>
       <input
         type="text"
         v-model.trim="title"
@@ -13,43 +13,51 @@
         @change="validateInput('title')"
         id="title"
         required
+        class="DefaultForm__input"
       />
       <label class="hasError" v-if="titleError"  for="title">
         {{ titleError }}
       </label>
-    </fieldset>
-    <fieldset>
+    </div>
+    <div class="DefaultForm__fieldset">
       <label>Description</label>
-      <textarea v-model.trim="description"></textarea>
-    </fieldset>
-    <fieldset>
-      <label for="day">Due date</label>
+      <textarea
+        v-model.trim="description"
+        class="DefaultForm__textarea"
+      ></textarea>
+    </div>
+    <div class="DefaultForm__fieldset DefaultForm__fieldset--row TaskForm__date">
+      <label class="DefaultForm__label" for="day">Due date</label>
       <input
         type="text"
         maxlenght="2"
         v-model.number="day"
         placeholder="DD"
         id="day"
+        class="DefaultForm__input"
       />
       <input
         type="text"
         maxlenght="2"
         v-model.number="month"
         placeholder="MM"
+        class="DefaultForm__input"
       />
       <input
         type="text"
         maxlenght="2"
         v-model.number="year"
-        placeholder="YYYY"/>
+        placeholder="YYYY"
+        class="DefaultForm__input TaskForm__year"/>
       <label class="hasError" v-if="dueDateError">{{ dueDateError }}</label>
-    </fieldset>
-    <fieldset>
-      <label>Priority</label>
+    </div>
+    <div class="DefaultForm__fieldset">
+      <label class="DefaultForm__label" for="priority">Priority</label>
       <select
         v-model="priority"
         required
         id="priority"
+        class="DefaultForm__select TaskForm__priority"
       >
         <option
           v-for="level in levels"
@@ -59,24 +67,27 @@
           {{ level }}
         </option>
       </select>
-    </fieldset>
-    <fieldset>
-      <label for="comments">Comments</label>
+    </div>
+    <div class="DefaultForm__fieldset">
+      <label class="DefaultForm__label" for="comments">Comments</label>
       <textarea
         name="comments"
         placeholder="Place the first task comment"
         v-model="comment"
         id="comments"
+        class="DefaultForm__textarea"
       ></textarea>
-    </fieldset>
-    <fieldset>
-      <button class="Btn">Add task</button>
-    </fieldset>
+    </div>
+    <div class="DefaultForm__fieldset">
+      <button class="Btn DefaultForm__submit">Add task</button>
+    </div>
   </form>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
+import CloseButton from '@/components/CloseButton.vue'
 
 import { Types, Task, PriorityLevels } from '@/store/index'
 
@@ -100,6 +111,9 @@ export default Vue.extend({
     this.dueDate = data.dueDate
     this.comment = data.comment
     this.priority = data.priority
+  },
+  components: {
+    CloseButton
   },
   data () {
     return {
@@ -173,3 +187,23 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.TaskForm {
+  &__priority {
+    max-width: 160px;
+  }
+
+  &__date {
+    max-width: 320px;
+    .DefaultForm__input {
+      flex: 0.8;
+      text-align: center;
+    }
+  }
+
+  &__year.DefaultForm__input {
+    flex: 1;
+  }
+}
+</style>>
