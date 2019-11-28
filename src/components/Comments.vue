@@ -2,22 +2,25 @@
   <div class="Comments">
     <div v-for="(comment, index) in comments" :key="index" class="Comment">
       <div class="Comment__header">
-        {{ comment.name }}
+        <span class="Comment__name">{{ comment.name ? comment.name : 'Anonymous' }}</span>
         <span class="Comment__date">{{ commentDate(comment.date) }}</span>
       </div>
       <div class="Comment__message">{{ comment.message }}</div>
     </div>
     <form @submit.prevent="sendComment" class="CommentForm">
-      <!--
-        <input type="text" placeholder="Your name" v-model="commentOwner">
-      -->
+      <input
+        type="text"
+        placeholder="Your name"
+        v-model="commentOwner"
+        class="DefaultForm__input CommentForm__input"
+      >
       <input
         type="text"
         placeholder="Write a comment"
         v-model="commentMessage"
-        class="DefaultForm__input CommentForm__message"
+        class="DefaultForm__input CommentForm__input"
       >
-      <button class="Btn">Add comment</button>
+      <button class="Btn" type="submit">Add comment</button>
     </form>
   </div>
 </template>
@@ -34,14 +37,14 @@ export default Vue.extend({
   name: 'Comments',
   data () {
     return {
-      // commentOwner: '',
+      commentOwner: '',
       commentMessage: ''
     }
   },
   props: {
     comments: Array,
     taskId: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -53,7 +56,7 @@ export default Vue.extend({
 
       this.$store.dispatch(Types.ADD_COMMENT, {
         message: this.commentMessage,
-        name: '',
+        name: this.commentOwner,
         taskId: this.taskId
       })
 
@@ -84,11 +87,14 @@ export default Vue.extend({
     font-size: 16px;
   }
 
+  &__name {
+    margin-right: 4px;
+  }
+
   &__date {
     font-weight: normal;
     font-size: 14px;
     color: #6f6f6f;
-    margin-left: 2px;
     display: inline-block;
   }
 
@@ -103,9 +109,16 @@ export default Vue.extend({
   display: flex;
   flex-wrap: wrap;
 
-  &__message {
+  &__input {
     flex: 1;
     margin-right: 8px;
+  }
+
+  @media screen and (max-width: 480px){
+    &__input {
+      min-width: 100%;
+      margin: 0 0 8px 0;
+    }
   }
 }
 </style>
