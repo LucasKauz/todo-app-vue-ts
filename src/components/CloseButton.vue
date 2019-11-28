@@ -1,5 +1,5 @@
 <template>
-  <button @click="() => onClick()" class="CloseIcon">
+  <button @click="() => onClick()" class="CloseIcon" type="button">
     <img
       src="@/assets/times.svg"
       svg-inline

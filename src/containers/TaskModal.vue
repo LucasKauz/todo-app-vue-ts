@@ -31,12 +31,12 @@ import { mapGetters } from 'vuex'
 
 interface ModalParams {
   params: {
-    taskId: number
+    taskId: string
   }
 }
 interface Data {
   taskFetched: boolean;
-  taskId: null | number;
+  taskId: null | string;
 }
 
 export default Vue.extend({
@@ -58,6 +58,10 @@ export default Vue.extend({
     },
     dispatchForm (formData: Task) {
       const type = (this.taskId) ? Types.EDIT_TASK : Types.ADD_TASK
+
+      if (this.taskId) {
+        formData.id = this.taskId
+      }
       const formDispatched = this.$store.dispatch(type, formData)
 
       formDispatched.finally(() => {
@@ -74,11 +78,7 @@ export default Vue.extend({
       }
 
       this.taskId = params.taskId
-
-      this.$store.dispatch(Types.LOAD_TASK, params.taskId)
-        .then(() => {
-          this.taskFetched = true
-        })
+      this.taskFetched = true
     },
     closed () {
       this.taskId = null

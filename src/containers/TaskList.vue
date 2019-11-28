@@ -7,7 +7,13 @@
         :task="task"
         :editTask="editTask"
         :viewTask="viewTask"
+        :toggleListTask="toggleListTask"
       />
+      <button
+        class="Btn TaskList__remove"
+        @click="deleteSelectedTasks"
+        v-if="selectedTasks.length > 0"
+      >Delete selected</button>
     </template>
     <template v-else>
       You do not have any tasks
@@ -20,17 +26,23 @@
 import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
 
-import { Types } from '@/store/index'
+import { Types, Task } from '@/store/index'
 
 import TaskItem from '@/components/TaskItem.vue'
 
+interface TaskList {
+  selectedTasks: string[];
+}
+
 export default Vue.extend({
   name: 'TaskList',
+  data (): TaskList {
+    return {
+      selectedTasks: []
+    }
+  },
   props: {
     addTask: Function
-  },
-  async mounted () {
-    this.$store.dispatch(Types.LIST_TASKS)
   },
   components: {
     TaskItem
@@ -41,16 +53,43 @@ export default Vue.extend({
     ])
   },
   methods: {
-    editTask (taskId: number) {
+    ...mapActions({
+      'deleteTasks': Types.DELETE_TASKS
+    }),
+    editTask (taskId: string) {
       this.$modal.show('task-modal', {
         taskId
       })
     },
-    viewTask (taskId: number) {
+    viewTask (taskId: string) {
       this.$modal.show('task-overview-modal', {
         taskId
       })
+    },
+    toggleListTask (taskId: string) {
+      let selectedTask = this.selectedTasks.findIndex((currentTaskId: string) => {
+        return currentTaskId === taskId
+      })
+
+      if (selectedTask === -1) {
+        this.selectedTasks.push(taskId)
+        return
+      }
+
+      this.selectedTasks.splice(selectedTask, 1)
+    },
+    deleteSelectedTasks () {
+      this.deleteTasks(this.selectedTasks)
+      this.selectedTasks = []
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.TaskList {
+  &__remove {
+    margin-top: 25px
+  }
+}
+</style>

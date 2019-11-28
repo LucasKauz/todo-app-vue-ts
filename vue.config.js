@@ -15,7 +15,7 @@ module.exports = {
         resourceRegExp: /^\.\/locale$/,
         contextRegExp: /moment$/
       })
-      // new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en-gb/)
     ]
+    // , transpileDependencies: ['vuex-persist']
   })
 }

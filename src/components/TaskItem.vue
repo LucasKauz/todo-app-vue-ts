@@ -1,6 +1,11 @@
 <template>
   <div class="TaskItem">
-    <span class="TaskItem__square"></span>
+    <span :class="[
+      'TaskItem__square',
+      isSelected ? 'TaskItem__square--active' : ''
+    ]" @click="selectTask">
+      <img class="TaskItem__check" src="@/assets/check.svg" svg-inline svg-sprite />
+    </span>
     <span class="TaskItem__title">{{ task.title }}</span>
     <img src="@/assets/calendar-alt.svg" svg-inline svg-sprite class="CalendarIcon TaskItem__column" alt="calendar icon" aria-hidden="true"/>
     <span class="TaskItem__column TaskItem__dueDate">
@@ -25,11 +30,24 @@ export default Vue.extend({
   props: {
     task: Object,
     editTask: Function,
-    viewTask: Function
+    viewTask: Function,
+    toggleListTask: Function
+  },
+  data () {
+    return {
+      isSelected: false
+    }
   },
   computed: {
     dueDate (): string {
       return moment(this.task.dueDate).format('DD/MM/YYYY')
+    }
+  },
+  methods: {
+    selectTask () {
+      this.isSelected = !this.isSelected
+
+      this.toggleListTask(this.task.id)
     }
   }
 })
@@ -48,6 +66,23 @@ export default Vue.extend({
     margin-right: 9px;
     border: solid 1px #333;
     box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.22);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--active {
+      & .TaskItem__check {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__check {
+    transition: opacity .3s;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
   }
 
   &__title {

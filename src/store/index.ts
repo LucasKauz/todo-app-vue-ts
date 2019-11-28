@@ -1,21 +1,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
+import uuid from 'uuid/v4'
+import moment from 'moment'
 
 Vue.use(Vuex)
 
 export interface Comment {
-  id: number;
-  name: string;
+  id: string;
+  name?: string;
   message: string;
   date: string;
 }
 
 export interface AddCommentPayload extends Pick<Comment, 'name' | 'message'> {
-  taskId: number;
+  taskId: string;
 }
 
 export interface Task {
-  id: number;
+  id: string;
   title: string;
   description: string;
   dueDate: string;
@@ -40,26 +43,28 @@ export enum PriorityLevels {
 }
 
 export const enum Types {
-  LIST_TASKS = 'LIST_TASKS',
-  LOAD_TASKS = 'LOAD_TASKS',
   UPDATE_TASKS = 'UPDATE_TASKS',
   ADD_TASK = 'ADD_TASK',
   EDIT_TASK = 'EDIT_TASK',
-  LOAD_TASK = 'LOAD_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
-  ADD_COMMENT = 'ADD_COMMENT'
+  ADD_COMMENT = 'ADD_COMMENT',
+  DELETE_TASKS = 'DELETE_TASKS'
 }
 
 export const enum Getters {
   GET_TASK_BY_ID = 'GET_TASK_BY_ID'
 }
 
+const vuexLocal = new VuexPersistence<TasksStore>({
+  storage: window.localStorage
+})
+
 export default new Vuex.Store<TasksStore>({
   state: {
     tasks: []
   },
   getters: {
-    [Getters.GET_TASK_BY_ID]: state => (taskId: number) => {
+    [Getters.GET_TASK_BY_ID]: state => (taskId: string) => {
       return state.tasks.find((task) => {
         return task.id === taskId
       })
@@ -77,64 +82,68 @@ export default new Vuex.Store<TasksStore>({
 
       state.tasks.splice(payload.taskIndex, 1, payload.task)
     },
-    [Types.ADD_COMMENT]: (state, payload: { comment: Comment, taskId: number }) => {
+    [Types.ADD_COMMENT]: (state, payload: { comment: Comment, taskId: string }) => {
       // find comment related task index
       const taskIndex = state.tasks.findIndex((task) => task.id === payload.taskId)
 
       if (taskIndex === -1) return
 
+      if (!state.tasks[taskIndex].comments) {
+        state.tasks[taskIndex].comments = [payload.comment]
+      }
+
       state.tasks[taskIndex].comments.push(payload.comment)
+    },
+    [Types.DELETE_TASKS]: (state, payload: string[]) => {
+      const newTasks = state.tasks.filter((task) => {
+        return !payload.some(taskId => task.id === taskId)
+      })
+
+      state.tasks = [...newTasks]
     }
   },
   actions: {
-    [Types.LOAD_TASKS] () {
-      return fetch('http://localhost:3000/tasks')
-        .then(response => response.json())
-    },
-    [Types.LIST_TASKS] ({ commit, dispatch }) {
-      dispatch(Types.LOAD_TASKS).then((response) => {
-        commit(Types.UPDATE_TASKS, response)
-      })
-    },
-    [Types.ADD_TASK] ({ commit }, payload) {
-      fetch('http://localhost:3000/add')
-        .then((response) => response.json())
-        .then((task) => {
-          commit(Types.ADD_TASK, task)
-        })
+    [Types.ADD_TASK] ({ commit }, payload: Task) {
+      const task = {
+        ...payload,
+        id: uuid(),
+        date: moment().format('YYYY-MM-DD'),
+        comments: []
+      }
+
+      commit(Types.ADD_TASK, task)
     },
     [Types.EDIT_TASK] ({ state, commit }, payload) {
-      fetch('http://localhost:3000/edit')
-        .then((response) => response.json())
-        .then((data) => {
-          const taskIndex = state.tasks.findIndex((task: Task) => task.id === data.id)
+      const task = {
+        ...payload,
+        comments: []
+      }
 
-          commit(Types.UPDATE_TASK, {
-            taskIndex,
-            task: data
-          })
-        })
-    },
-    [Types.LOAD_TASK] ({ commit, state }, taskId) {
-      return fetch(`http://localhost:3000/tasks/${taskId}`)
-        .then((response) => response.json())
-        .then((task) => {
-          const taskIndex = state.tasks.findIndex((task: Task) => task.id === taskId)
+      const taskIndex = state.tasks.findIndex((task: Task) => task.id === payload.id)
 
-          commit(Types.UPDATE_TASK, { taskIndex, task })
-        })
+      commit(Types.UPDATE_TASK, {
+        taskIndex,
+        task
+      })
     },
-    [Types.ADD_COMMENT] ({ commit, state }, payload: AddCommentPayload) {
-      return fetch(`http://localhost:3000/comment`)
-        .then((response) => response.json())
-        .then((data: AddCommentResponse) => {
-          commit(Types.ADD_COMMENT, {
-            taskId: payload.taskId,
-            comment: data.comment
-          })
-        })
+    [Types.ADD_COMMENT] ({ commit }, payload: AddCommentPayload) {
+      let comment: Comment = {
+        name: payload.name,
+        message: payload.message,
+        id: uuid(),
+        date: moment().format('YYYY-MM-DD')
+      }
+
+      commit(Types.ADD_COMMENT, {
+        taskId: payload.taskId,
+        comment: comment
+      })
+    },
+    [Types.DELETE_TASKS] ({ commit, state }, payload: string[]) {
+      commit(Types.DELETE_TASKS, payload)
     }
   },
   modules: {
-  }
+  },
+  plugins: [vuexLocal.plugin]
 })

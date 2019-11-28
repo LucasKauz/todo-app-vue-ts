@@ -161,14 +161,14 @@ export default Vue.extend({
       this.updateDueDate()
     },
     year (newYear) {
+      this.updateDueDate()
+
       if (Number.parseInt(newYear) <= 1900) {
         this.yearError = true
         return
       }
 
       this.yearError = false
-
-      this.updateDueDate()
     },
     dueDate (newDueDate) {
       if (isValidDate(newDueDate)) {
@@ -245,8 +245,7 @@ export default Vue.extend({
     updateDueDate () {
       if (
         Number.parseInt(this.day) > 0 &&
-        Number.parseInt(this.month) > 0 &&
-        Number.parseInt(this.year) > 1900
+        Number.parseInt(this.month) > 0
       ) {
         this.dueDate = `${this.year}-${this.month}-${this.day}`
       }

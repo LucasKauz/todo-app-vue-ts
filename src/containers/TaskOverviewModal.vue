@@ -61,11 +61,7 @@ export default Vue.extend({
       }
 
       this.taskId = params.taskId
-
-      this.$store.dispatch(Types.LOAD_TASK, params.taskId)
-        .then(() => {
-          this.taskFetched = true
-        })
+      this.taskFetched = true
     },
     closed () {
       this.taskId = null
