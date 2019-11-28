@@ -99,17 +99,20 @@ export default new Vuex.Store<TasksStore>({
     [Types.ADD_TASK] ({ commit }, payload) {
       fetch('http://localhost:3000/add')
         .then((response) => response.json())
-        .then((jsonResponse) => {
-          const task = jsonResponse.data[0]
+        .then((task) => {
           commit(Types.ADD_TASK, task)
         })
     },
-    [Types.EDIT_TASK] ({ commit }, payload) {
+    [Types.EDIT_TASK] ({ state, commit }, payload) {
       fetch('http://localhost:3000/edit')
         .then((response) => response.json())
-        .then((jsonResponse) => {
-          const task = jsonResponse.data[0]
-          commit(Types.ADD_TASK, task)
+        .then((data) => {
+          const taskIndex = state.tasks.findIndex((task: Task) => task.id === data.id)
+
+          commit(Types.UPDATE_TASK, {
+            taskIndex,
+            task: data
+          })
         })
     },
     [Types.LOAD_TASK] ({ commit, state }, taskId) {

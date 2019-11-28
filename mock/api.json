@@ -26,7 +26,7 @@
             "id": 2,
             "title": "Buy some milk",
             "description": "The user MUST buy me some milk.",
-            "dueDate": "2019-02-12",
+            "dueDate": "2019-02-14",
             "priority": "high",
             "comment": "Please, buy me some milk.",
             "comments": []
@@ -35,7 +35,7 @@
             "id": 3,
             "title": "Be happy",
             "description": "The user MUST be able to be happy",
-            "dueDate": "2020-01-10",
+            "dueDate": "2020-01-28",
             "priority": "medium",
             "comment": "Don't worry.",
             "comments": [

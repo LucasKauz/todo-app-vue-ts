@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="sendForm" class="DefaultForm">
     <header>
-      <h2 class="ModalHeader__title">{{ title || 'Add new Task' }}</h2>
+      <h2 class="ModalHeader__title">{{ isEdit ? title : 'Add new Task' }}</h2>
       <CloseButton :onClick="closeModal" />
     </header>
     <div class="DefaultForm__fieldset">
@@ -99,7 +99,8 @@ export default Vue.extend({
     getCurrentTask: Function,
     dispatchForm: Function,
     currentData: Object,
-    closeModal: Function
+    closeModal: Function,
+    isEdit: Boolean
   },
   async mounted () {
     const data = await this.getCurrentTask()
@@ -131,29 +132,29 @@ export default Vue.extend({
       get () { return PriorityLevels }
     },
     day: {
-      get (): string {
-        return this.dueDate.split('-')[1] || ''
+      get (): string | number {
+        return Number.parseInt(this.dueDate.split('-')[2]) || ''
+      },
+      set (val: string) {
+        this.dueDate = changeDatePart(2, val, this.dueDate)
+        this.validateInput('dueDate')
+      }
+    },
+    month: {
+      get (): string | number {
+        return Number.parseInt(this.dueDate.split('-')[1]) || ''
       },
       set (val: string) {
         this.dueDate = changeDatePart(1, val, this.dueDate)
         this.validateInput('dueDate')
       }
     },
-    month: {
-      get (): string {
-        return this.dueDate.split('-')[0] || ''
+    year: {
+      get (): string | number {
+        return Number.parseInt(this.dueDate.split('-')[0]) || ''
       },
       set (val: string) {
         this.dueDate = changeDatePart(0, val, this.dueDate)
-        this.validateInput('dueDate')
-      }
-    },
-    year: {
-      get (): string {
-        return this.dueDate.split('-')[2] || ''
-      },
-      set (val: string) {
-        this.dueDate = changeDatePart(2, val, this.dueDate)
         this.validateInput('dueDate')
       }
     }
@@ -168,7 +169,7 @@ export default Vue.extend({
         comment: this.comment
       }
 
-      this.dispatchForm(Types.ADD_TASK, formData)
+      this.dispatchForm(formData)
     },
     validateInput (name: string) {
       switch (name) {

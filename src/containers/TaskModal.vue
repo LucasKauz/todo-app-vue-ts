@@ -12,7 +12,11 @@
       Loading...
     </template>
     <template v-else>
-      <TaskForm :getCurrentTask="getCurrentTask" :closeModal="closeModal"/>
+      <TaskForm
+        :getCurrentTask="getCurrentTask"
+        :closeModal="closeModal"
+        :dispatchForm="dispatchForm"
+        :isEdit="!!taskId"/>
     </template>
   </modal>
 </template>
@@ -52,7 +56,8 @@ export default Vue.extend({
     getCurrentTask (): Task | null {
       return this.taskId ? this.getTaskById(this.taskId) : null
     },
-    dispatchForm (type: Types, formData: Task) {
+    dispatchForm (formData: Task) {
+      const type = (this.taskId) ? Types.EDIT_TASK : Types.ADD_TASK
       const formDispatched = this.$store.dispatch(type, formData)
 
       formDispatched.finally(() => {

@@ -1,7 +1,7 @@
 export const changeDatePart = (part: number, val: string, date: string) => {
   let splittedDate = date.split('-')
 
-  splittedDate[part] = val
+  splittedDate[part] = String(Number.parseInt(val))
 
   return splittedDate.join('-')
 }
@@ -15,7 +15,7 @@ export const validateDate = (date: string) => {
     return 'Invalid date format'
   }
 
-  const actualDate = Number.parseInt(date.split('-')[1])
+  const actualDate = Number.parseInt(date.split('-')[2])
 
   // This validates if the date has valid value, like on leap years
   if (dateObj.getDate() !== actualDate) {
