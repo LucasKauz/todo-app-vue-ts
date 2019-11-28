@@ -3,14 +3,14 @@
     <span class="TaskItem__square"></span>
     <span class="TaskItem__title">{{ task.title }}</span>
     <img src="@/assets/calendar-alt.svg" svg-inline svg-sprite class="CalendarIcon TaskItem__column" alt="calendar icon" aria-hidden="true"/>
-    <span class="TaskItem__column">
+    <span class="TaskItem__column TaskItem__dueDate">
       {{ dueDate }}
     </span>
     <button class="Btn Btn--withIcon TaskItem__column" @click="() => viewTask(task.id)">
       <img src="@/assets/comment.svg" svg-inline svg-sprite class="Btn__icon" alt="Comment" aria-label="Comment task"/>
     </button>
     <button class="Btn Btn--withIcon" @click="() => editTask(task.id)">
-      <img src="@/assets/pencil-alt.svg" svg-inline svg-sprite class="Btn__icon" alt="Edit" aria-label="Edit task"/>
+      <img src="@/assets/pencil-alt.svg" svg-inline svg-sprite class="Btn__icon TaskItem__pencil" alt="Edit" aria-label="Edit task"/>
     </button>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default Vue.extend({
   },
   computed: {
     dueDate (): string {
-      return moment(new Date(this.task.dueDate)).format('DD/MM/YYYY')
+      return moment(this.task.dueDate).format('DD/MM/YYYY')
     }
   }
 })
@@ -55,7 +55,17 @@ export default Vue.extend({
   }
 
   &__column {
-    margin-right: 7px;
+    margin-right: 8px;
+  }
+
+  &__dueDate {
+    margin-right: 12px;
+  }
+
+  &__pencil {
+    width: 13px;
+    height: 13px;
+    margin-top: 2px;
   }
 
   @media screen and (max-width: 420px) {

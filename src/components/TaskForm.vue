@@ -1,11 +1,11 @@
 <template>
   <form @submit.prevent="sendForm" class="DefaultForm TaskForm">
     <header class="ModalHeader">
-      <h2 class="ModalHeader__title">{{ isEdit ? title : 'Add new Task' }}</h2>
+      <h2 class="ModalHeader__title">{{ isEdit ? title : 'New Task' }}</h2>
       <CloseButton :onClick="closeModal" />
     </header>
     <div class="DefaultForm__fieldset">
-      <label class="DefaultForm__label" for="title">Title</label>
+      <label class="DefaultForm__label" for="title">Title:</label>
       <input
         type="text"
         v-model.trim="title"
@@ -20,35 +20,47 @@
       </label>
     </div>
     <div class="DefaultForm__fieldset">
-      <label>Description</label>
+      <label>Description:</label>
       <textarea
         v-model.trim="description"
         class="DefaultForm__textarea"
       ></textarea>
     </div>
     <div class="DefaultForm__fieldset DefaultForm__fieldset--row TaskForm__date">
-      <label class="DefaultForm__label" for="day">Due date</label>
+      <label class="DefaultForm__label" for="day">Set due date:</label>
       <input
         type="text"
         maxlenght="2"
-        v-model.number="day"
+        v-model="day"
         placeholder="DD"
         id="day"
-        class="DefaultForm__input"
+        :class="[
+          'DefaultForm__input',
+          (dayError) ? 'DefaultForm__input--withErrors' : ''
+        ]"
       />
       <input
         type="text"
         maxlenght="2"
-        v-model.number="month"
+        v-model="month"
         placeholder="MM"
         class="DefaultForm__input"
+        :class="[
+          'DefaultForm__input',
+          (monthError) ? 'DefaultForm__input--withErrors' : ''
+        ]"
       />
       <input
         type="text"
         maxlenght="2"
-        v-model.number="year"
+        v-model="year"
         placeholder="YYYY"
-        class="DefaultForm__input TaskForm__year"/>
+        class="DefaultForm__input TaskForm__year"
+        :class="[
+          'DefaultForm__input',
+          (yearError) ? 'DefaultForm__input--withErrors' : ''
+        ]"
+      />
       <label class="hasError" v-if="dueDateError">{{ dueDateError }}</label>
     </div>
     <div class="DefaultForm__fieldset">
@@ -69,7 +81,7 @@
       </select>
     </div>
     <div class="DefaultForm__fieldset">
-      <label class="DefaultForm__label" for="comments">Comments</label>
+      <label class="DefaultForm__label" for="comments">Comments:</label>
       <textarea
         name="comments"
         placeholder="Place the first task comment"
@@ -93,7 +105,14 @@ import CloseButton from '@/components/CloseButton.vue'
 
 import { Types, Task, PriorityLevels } from '@/store/index'
 
-import { changeDatePart, validateDate } from '@/helpers/formValidate'
+import {
+  changeDatePart,
+  isValidDate,
+  getDay,
+  getMonth,
+  getYear
+} from '@/helpers/formValidate'
+import moment from 'moment'
 
 export default Vue.extend({
   name: 'TaskForm',
@@ -114,6 +133,51 @@ export default Vue.extend({
     this.dueDate = data.dueDate
     this.comment = data.comment
     this.priority = data.priority
+
+    const momentDate = moment(this.dueDate)
+    this.day = String(momentDate.date())
+    this.month = String(momentDate.month() + 1).padStart(2, '0')
+    this.year = String(momentDate.year())
+  },
+  watch: {
+    day (newDay) {
+      if (Number.parseInt(newDay) < 1) {
+        this.dayError = true
+        return
+      }
+
+      this.dayError = false
+
+      this.updateDueDate()
+    },
+    month (newMonth) {
+      if (Number.parseInt(newMonth) < 1) {
+        this.monthError = true
+        return
+      }
+
+      this.monthError = false
+
+      this.updateDueDate()
+    },
+    year (newYear) {
+      if (Number.parseInt(newYear) <= 1900) {
+        this.yearError = true
+        return
+      }
+
+      this.yearError = false
+
+      this.updateDueDate()
+    },
+    dueDate (newDueDate) {
+      if (isValidDate(newDueDate)) {
+        this.dueDateError = 'Invalid date.'
+        return
+      }
+
+      this.dueDateError = ''
+    }
   },
   components: {
     CloseButton
@@ -123,6 +187,12 @@ export default Vue.extend({
       title: '',
       titleError: '',
       description: '',
+      day: '',
+      dayError: false,
+      month: '',
+      monthError: false,
+      year: '',
+      yearError: false,
       dueDate: '',
       dueDateError: '',
       comment: '',
@@ -132,33 +202,6 @@ export default Vue.extend({
   computed: {
     levels: {
       get () { return PriorityLevels }
-    },
-    day: {
-      get (): string | number {
-        return Number.parseInt(this.dueDate.split('-')[2]) || ''
-      },
-      set (val: string) {
-        this.dueDate = changeDatePart(2, val, this.dueDate)
-        this.validateInput('dueDate')
-      }
-    },
-    month: {
-      get (): string | number {
-        return Number.parseInt(this.dueDate.split('-')[1]) || ''
-      },
-      set (val: string) {
-        this.dueDate = changeDatePart(1, val, this.dueDate)
-        this.validateInput('dueDate')
-      }
-    },
-    year: {
-      get (): string | number {
-        return Number.parseInt(this.dueDate.split('-')[0]) || ''
-      },
-      set (val: string) {
-        this.dueDate = changeDatePart(0, val, this.dueDate)
-        this.validateInput('dueDate')
-      }
     }
   },
   methods: {
@@ -171,20 +214,41 @@ export default Vue.extend({
         comment: this.comment
       }
 
+      if (!this.isFormValid()) return
+
       this.dispatchForm(formData)
+    },
+    isFormValid (): boolean {
+      return (this.validateInput('name') &&
+      this.validateInput('dueDate'))
     },
     validateInput (name: string) {
       switch (name) {
         case 'title':
           if (this.title.length < 1 || this.title.length > 255) {
             this.titleError = 'Title must be between than 1 and 255 characters.'
+            return false
           }
           break
 
         case 'dueDate':
         default:
-          this.dueDateError = validateDate(this.dueDate)
+          this.dueDateError = isValidDate(`${this.year}-${this.month}-${this.day}`, true)
+          if (this.dueDateError.length > 0) {
+            return false
+          }
           break
+      }
+
+      return true
+    },
+    updateDueDate () {
+      if (
+        Number.parseInt(this.day) > 0 &&
+        Number.parseInt(this.month) > 0 &&
+        Number.parseInt(this.year) > 1900
+      ) {
+        this.dueDate = `${this.year}-${this.month}-${this.day}`
       }
     }
   }

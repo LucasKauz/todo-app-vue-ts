@@ -60,13 +60,7 @@ export default Vue.extend({
       this.commentMessage = ''
     },
     commentDate (date: string): string {
-      console.log(
-        date,
-        moment(new Date(date)),
-        moment(new Date(date)).format('DD/MM/YYYY'),
-        moment(new Date(date)).calendar()
-      )
-      return moment(new Date(date)).calendar()
+      return moment(date).calendar()
     }
   }
 })
@@ -74,7 +68,6 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .Comments {
-  margin-top: 20px;
   border-top: 1px solid #eaeaea;
   padding-top: 20px;
 }

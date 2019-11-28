@@ -83,6 +83,9 @@ body {
   }
   &__input {
     height: 39px;
+    &--withErrors {
+      border-color: red;
+    }
   }
   &__textarea {
     height: 64px;

@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const changeDatePart = (part: number, val: string, date: string) => {
   let splittedDate = date.split('-')
 
@@ -6,21 +8,45 @@ export const changeDatePart = (part: number, val: string, date: string) => {
   return splittedDate.join('-')
 }
 
-export const validateDate = (date: string) => {
-  const parsedDate = Date.parse(date)
-  const dateObj = new Date(parsedDate)
+const hasItemSmallerThanOne = (arr: string[]) => {
+  return (
+    arr.filter((i): boolean => Number.parseInt(i) > 0).length !== arr.length
+  )
+}
 
-  // This will happen when the date makes no sense
-  if (Number.isNaN(parsedDate)) {
-    return 'Invalid date format'
+export const isValidDate = (date: string, force: boolean = false) => {
+  if (date.length < 1) return 'Invalid date'
+
+  const momentDate = moment(date)
+  if (force && hasItemSmallerThanOne(date.split('-'))) {
+    return 'Invalid date'
   }
 
-  const actualDate = Number.parseInt(date.split('-')[2])
+  if (!momentDate.isValid()) return 'Invalid date'
 
   // This validates if the date has valid value, like on leap years
-  if (dateObj.getDate() !== actualDate) {
-    return 'Invalide date'
+  const actualDay = Number.parseInt(date.split('-')[2])
+  if (momentDate.date() !== actualDay) {
+    return 'Invalid date'
   }
 
   return ''
+}
+
+export const getDay = (date: string): string => {
+  if (date.length < 1) return ''
+
+  return String(moment(date).date())
+}
+
+export const getMonth = (date: string): string => {
+  if (date.length < 1) return ''
+
+  return String(moment(date).month() + 1)
+}
+
+export const getYear = (date: string): string => {
+  if (date.length < 1) return ''
+
+  return String(moment(date).year())
 }

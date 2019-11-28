@@ -74,6 +74,8 @@ export default Vue.extend({
 
   &--withIcon {
     padding: 8px 10px;
+    width: 36px;
+    height: 34px;
   }
 
   &:hover, &:focus {

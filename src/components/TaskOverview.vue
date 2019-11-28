@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   computed: {
     dueDate () {
-      return moment(new Date(this.currentTask.dueDate)).format('DD/MM/YYYY')
+      return moment(this.currentTask.dueDate).format('DD/MM/YYYY')
     }
   },
   components: {
