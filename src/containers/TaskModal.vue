@@ -24,10 +24,11 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import { mapGetters } from 'vuex'
+
 import TaskForm from '@/components/TaskForm.vue'
 
 import { Types, Task, Getters } from '@/store/index'
-import { mapGetters } from 'vuex'
 
 interface ModalParams {
   params: {

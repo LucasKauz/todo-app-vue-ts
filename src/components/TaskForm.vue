@@ -101,6 +101,8 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import moment from 'moment'
+
 import CloseButton from '@/components/CloseButton.vue'
 
 import { Types, Task, PriorityLevels } from '@/store/index'
@@ -112,7 +114,6 @@ import {
   getMonth,
   getYear
 } from '@/helpers/formValidate'
-import moment from 'moment'
 
 export default Vue.extend({
   name: 'TaskForm',

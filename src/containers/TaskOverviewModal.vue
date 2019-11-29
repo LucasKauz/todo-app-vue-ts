@@ -23,10 +23,11 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import { mapGetters } from 'vuex'
+
 import TaskOverview from '@/components/TaskOverview.vue'
 
 import { Types, Task, Getters } from '@/store/index'
-import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'TaskModal',

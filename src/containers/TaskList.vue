@@ -24,6 +24,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
 import { mapState, mapActions } from 'vuex'
 
 import { Types, Task } from '@/store/index'
