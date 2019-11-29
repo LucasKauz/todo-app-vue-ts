@@ -1,12 +1,9 @@
 <template>
   <div class="Comments">
-    <div v-for="(comment, index) in comments" :key="index" class="Comment">
-      <div class="Comment__header">
-        <span class="Comment__name">{{ comment.name ? comment.name : 'Anonymous' }}</span>
-        <span class="Comment__date">{{ commentDate(comment.date) }}</span>
-      </div>
-      <div class="Comment__message">{{ comment.message }}</div>
-    </div>
+    <Comment
+      v-for="(comment, index) in comments"
+      :key="index"
+      :comment="comment" />
     <form @submit.prevent="sendComment" class="CommentForm">
       <input
         type="text"
@@ -28,10 +25,11 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import moment from 'moment'
 import { mapMutations, mapActions } from 'vuex'
 
 import { Types } from '../store'
+
+import Comment from '@/components/Comment.vue'
 
 export default Vue.extend({
   name: 'Comments',
@@ -61,10 +59,10 @@ export default Vue.extend({
       })
 
       this.commentMessage = ''
-    },
-    commentDate (date: string): string {
-      return moment(date).calendar()
     }
+  },
+  components: {
+    Comment
   }
 })
 </script>
@@ -73,34 +71,6 @@ export default Vue.extend({
 .Comments {
   border-top: 1px solid #eaeaea;
   padding-top: 20px;
-}
-.Comment {
-  margin-bottom: 20px;
-  padding: 0 20px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  &__header {
-    font-weight: bold;
-    font-size: 16px;
-  }
-
-  &__name {
-    margin-right: 4px;
-  }
-
-  &__date {
-    font-weight: normal;
-    font-size: 14px;
-    color: #6f6f6f;
-    display: inline-block;
-  }
-
-  &__message {
-    margin-top: 4px;
-  }
 }
 .CommentForm {
   padding: 20px;
