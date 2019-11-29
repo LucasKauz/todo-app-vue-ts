@@ -6,8 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "mock": "json-server --watch mock/api.json"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@types/uuid": "^3.4.6",
@@ -33,7 +32,6 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "json-server": "^0.15.1",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
     "typescript": "~3.5.3",
