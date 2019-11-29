@@ -1,0 +1,15 @@
+{
+  "name": "PawaTask",
+  "short_name": "PawaTask",
+  "icons": [
+    {
+        "src": "/favicon.ico",
+        "sizes": "16x16",
+        "type": "image/ico"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ef4b25",
+  "theme_color": "#ef4b25"
+}
