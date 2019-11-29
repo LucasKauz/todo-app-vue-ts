@@ -139,7 +139,7 @@ export default Vue.extend({
     this.priority = data.priority
 
     const momentDate = moment(this.dueDate, 'YYYY-MM-DD')
-    this.day = String(momentDate.date())
+    this.day = String(momentDate.date()).padStart(2, '0')
     this.month = String(momentDate.month() + 1).padStart(2, '0')
     this.year = String(momentDate.year())
   },
