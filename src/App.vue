@@ -45,7 +45,7 @@ export default Vue.extend({
   max-width: 980px;
   min-width: 320px;
   padding: 0 16px 90px;
-  margin: 90px auto 0;
+  margin: 48px auto 0;
 }
 * {
   box-sizing: border-box;
