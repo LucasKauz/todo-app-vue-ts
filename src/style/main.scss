@@ -83,6 +83,7 @@ body {
   }
   &__input {
     height: 39px;
+    min-width: 0;
     &--withErrors {
       border-color: red;
     }
