@@ -11,10 +11,10 @@
     <span class="TaskItem__column TaskItem__dueDate">
       {{ dueDate }}
     </span>
-    <button class="Btn Btn--withIcon TaskItem__column" @click="() => viewTask(task.id)">
+    <button class="Btn Btn--withIcon TaskItem__column TaskItem__comment" @click="() => viewTask(task.id)">
       <img src="@/assets/comment.svg" svg-inline svg-sprite class="Btn__icon" alt="Comment" aria-label="Comment task"/>
     </button>
-    <button class="Btn Btn--withIcon" @click="() => editTask(task.id)">
+    <button class="Btn Btn--withIcon TaskItem__edit" @click="() => editTask(task.id)">
       <img src="@/assets/pencil-alt.svg" svg-inline svg-sprite class="Btn__icon TaskItem__pencil" alt="Edit" aria-label="Edit task"/>
     </button>
   </div>
@@ -40,7 +40,7 @@ export default Vue.extend({
   },
   computed: {
     dueDate (): string {
-      return moment(this.task.dueDate).format('DD/MM/YYYY')
+      return moment(this.task.dueDate, 'YYYY-MM-DD', true).format('DD/MM/YYYY')
     }
   },
   methods: {

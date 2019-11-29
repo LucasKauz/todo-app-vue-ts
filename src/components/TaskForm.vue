@@ -10,7 +10,7 @@
         type="text"
         v-model.trim="title"
         placeholder="Task title"
-        @change="validateInput('title')"
+        @change="validateTitle()"
         id="title"
         required
         class="DefaultForm__input"
@@ -32,6 +32,7 @@
         type="text"
         maxlenght="2"
         v-model="day"
+        name="day"
         placeholder="DD"
         id="day"
         :class="[
@@ -43,6 +44,7 @@
         type="text"
         maxlenght="2"
         v-model="month"
+        name="month"
         placeholder="MM"
         class="DefaultForm__input"
         :class="[
@@ -54,6 +56,7 @@
         type="text"
         maxlenght="2"
         v-model="year"
+        name="year"
         placeholder="YYYY"
         class="DefaultForm__input TaskForm__year"
         :class="[
@@ -135,7 +138,7 @@ export default Vue.extend({
     this.comment = data.comment
     this.priority = data.priority
 
-    const momentDate = moment(this.dueDate)
+    const momentDate = moment(this.dueDate, 'YYYY-MM-DD')
     this.day = String(momentDate.date())
     this.month = String(momentDate.month() + 1).padStart(2, '0')
     this.year = String(momentDate.year())
@@ -152,7 +155,10 @@ export default Vue.extend({
       this.updateDueDate()
     },
     month (newMonth) {
-      if (Number.parseInt(newMonth) < 1) {
+      if (
+        Number.parseInt(newMonth) < 1 ||
+        Number.parseInt(newMonth) > 12
+      ) {
         this.monthError = true
         return
       }
@@ -172,7 +178,7 @@ export default Vue.extend({
       this.yearError = false
     },
     dueDate (newDueDate) {
-      if (isValidDate(newDueDate)) {
+      if (!isValidDate(newDueDate)) {
         this.dueDateError = 'Invalid date.'
         return
       }
@@ -219,28 +225,26 @@ export default Vue.extend({
 
       this.dispatchForm(formData)
     },
-    isFormValid (): boolean {
-      return (this.validateInput('name') &&
-      this.validateInput('dueDate'))
-    },
-    validateInput (name: string) {
-      switch (name) {
-        case 'title':
-          if (this.title.length < 1 || this.title.length > 255) {
-            this.titleError = 'Title must be between than 1 and 255 characters.'
-            return false
-          }
-          break
 
-        case 'dueDate':
-        default:
-          this.dueDateError = isValidDate(`${this.year}-${this.month}-${this.day}`, true)
-          if (this.dueDateError.length > 0) {
-            return false
-          }
-          break
+    isFormValid (): boolean {
+      return (this.validateTitle() &&
+      this.validateDueDate())
+    },
+    validateTitle () {
+      if (this.title.length < 1 || this.title.length > 255) {
+        this.titleError = 'Title must be between than 1 and 255 characters.'
+        return false
       }
 
+      return true
+    },
+    validateDueDate () {
+      if (!isValidDate(this.dueDate, true)) {
+        this.dueDateError = 'Invalid date'
+        return false
+      }
+
+      this.dueDateError = ''
       return true
     },
     updateDueDate () {

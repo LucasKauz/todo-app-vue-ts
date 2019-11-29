@@ -47,12 +47,14 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions({
+      'addComment': Types.ADD_COMMENT
+    }),
     sendComment () {
       if (this.commentMessage.length < 2) {
         return
       }
-
-      this.$store.dispatch(Types.ADD_COMMENT, {
+      this.addComment({
         message: this.commentMessage,
         name: this.commentOwner,
         taskId: this.taskId

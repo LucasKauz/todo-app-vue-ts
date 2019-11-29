@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   methods: {
     commentDate (date: string): string {
-      return moment(date).calendar()
+      return moment(date, 'YYYY-MM-DD').calendar()
     }
   }
 })

@@ -15,38 +15,38 @@ const hasItemSmallerThanOne = (arr: string[]) => {
 }
 
 export const isValidDate = (date: string, force: boolean = false) => {
-  if (date.length < 1) return 'Invalid date'
+  if (date.length < 1) return false
 
-  const momentDate = moment(date)
+  const momentDate = moment(date, 'YYYY-MM-DD', true)
   if (force && hasItemSmallerThanOne(date.split('-'))) {
-    return 'Invalid date'
+    return false
   }
 
-  if (!momentDate.isValid()) return 'Invalid date'
+  if (!momentDate.isValid()) return false
 
   // This validates if the date has valid value, like on leap years
   const actualDay = Number.parseInt(date.split('-')[2])
   if (momentDate.date() !== actualDay) {
-    return 'Invalid date'
+    return false
   }
 
-  return ''
+  return true
 }
 
 export const getDay = (date: string): string => {
   if (date.length < 1) return ''
 
-  return String(moment(date).date())
+  return String(moment(date, 'YYYY-MM-DD', true).date())
 }
 
 export const getMonth = (date: string): string => {
   if (date.length < 1) return ''
 
-  return String(moment(date).month() + 1)
+  return String(moment(date, 'YYYY-MM-DD', true).month() + 1)
 }
 
 export const getYear = (date: string): string => {
   if (date.length < 1) return ''
 
-  return String(moment(date).year())
+  return String(moment(date, 'YYYY-MM-DD', true).year())
 }

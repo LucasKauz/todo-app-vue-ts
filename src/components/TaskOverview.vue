@@ -30,7 +30,7 @@ import Vue from 'vue'
 
 import moment from 'moment'
 
-import Comments from '@/components/Comments.vue'
+import Comments from '@/containers/Comments.vue'
 import CloseButton from '@/components/CloseButton.vue'
 
 export default Vue.extend({
@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   computed: {
     dueDate () {
-      return moment(this.currentTask.dueDate).format('DD/MM/YYYY')
+      return moment(this.currentTask.dueDate, 'YYYY-MM-DD').format('DD/MM/YYYY')
     }
   },
   components: {
