@@ -1,4 +1,4 @@
-# PawaTask
+# Todo App with Vue and TS
 
 PawaTask is a task manager that uses you localStorage capabilites to power a task list
 
