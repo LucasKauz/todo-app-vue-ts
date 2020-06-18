@@ -1,6 +1,6 @@
 # Todo App with Vue and TS
 
-PawaTask is a task manager that uses you localStorage capabilites to power a task list
+PawaTask is a task manager that uses your localStorage capabilites to power a task list
 
 See the demo at https://pawatask.now.sh/
 
@@ -49,14 +49,3 @@ I tested all the components and tried to cover the most sensitive parts of it. I
 
 ### Lint
 I used the standard - https://standardjs.com/ - so we don't have, for example, semicolon.
-
-## Changes made
-I know there are no requirements on both of the following items, but it seemed a natural and a great fit to the "Bonus"
-
-### Name on comment form
-I had to add a field to the comment form, without it would not be possible to have names related to comments. Nameless comments will be treated as Anonymous.
-
-### Select multiple
-I used the box on the task item to create a multiple task selector, so the user can delete all the selected tasks.
-
-It has much more to be done. But for this test, I had to define a line, so that's it.
